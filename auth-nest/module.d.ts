@@ -1,7 +1,7 @@
 declare namespace NodeJs{
     export interface ProcessEnv{
         DATABASE_URL: string;
-        JWTSECRETKEY: string;
-        JWTREFRESHTOKENKEY: string;
+        JWT_SECRET_KEY: string;
+        JWT_REFRESH_TOKEN_KEY: string;
     }
 }
