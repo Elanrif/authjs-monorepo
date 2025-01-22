@@ -36,7 +36,14 @@ export const authOptions: NextAuthOptions = {
                 return user;
             }
         })
-    ]
+    ],
+
+    callbacks:{
+        async jwt({token,user}){
+            console.log("JWT token", token, " user", user);
+            return token;
+        }
+    }
 }
 
 const handler = NextAuth(authOptions);
