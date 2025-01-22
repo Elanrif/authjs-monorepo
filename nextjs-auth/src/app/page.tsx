@@ -3,6 +3,6 @@ import {MenubarHeeader} from "@/components/menubarHeader";
 
 export default function Home() {
   return (
-    <> default page ! </>
+    <> Hi, you are watching elanrif next-auth application ! </>
   );
 }
