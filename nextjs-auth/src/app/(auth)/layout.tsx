@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import {MenubarHeeader} from "@/components/menubarHeader";
 import Link from "next/link";
 import {GalleryVerticalEnd} from "lucide-react";
-import {LoginForm} from "@/components/login-form";
+import {SignInForm} from "@/components/signIn-form";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",

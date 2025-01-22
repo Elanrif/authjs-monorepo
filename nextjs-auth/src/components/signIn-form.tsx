@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {useEffect, useState} from "react";
 
-export function LoginForm({
+export function SignInForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"form">) {
@@ -62,8 +62,8 @@ export function LoginForm({
       </div>
       <div className="text-center text-sm">
         Vous n&apos;avez pas de compte?{" "}
-        <a href="#" className="underline underline-offset-4">
-         Se connecter
+        <a href="/sign-up" className="underline underline-offset-4">
+         Créer un compte
         </a>
       </div>
     </form>
