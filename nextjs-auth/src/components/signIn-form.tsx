@@ -9,13 +9,14 @@ export function SignInForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"form">) {
-  const [isLoading, setIsLoading] = useState(false)
+  const [mount, setMount] = useState(false)
+
   useEffect(() => {
-    setIsLoading(true)
+    setMount(true)
   }, []);
 
-  if (!isLoading) {
-    return false;
+  if (!mount) {
+    return null;
   }
   return (
     <form className={cn("flex flex-col gap-6", className)} {...props}>

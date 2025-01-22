@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {useEffect, useState} from "react";
 import Link from "next/link";
+import {Backend_URL} from "@/lib/Constants";
 
 type FormInput = {
   name: string;
@@ -19,14 +20,17 @@ export function SignUpForm({
   const [formData, setFormData] = useState<FormInput>({
     name: "",
     email: "",
-    password: "",
+    password: "1234",
   })
-  const [isLoading, setIsLoading] = useState(false)
+  const [mount, setMount] = useState(false)
 
   useEffect(() => {
-    setIsLoading(true)
+    setMount(true)
   }, []);
 
+  if (!mount) {
+    return null;
+  }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {name, value} = event.target;
@@ -36,14 +40,30 @@ export function SignUpForm({
     }));
   }
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log("formulaire soumis: ", formData);
+
+    const res = await fetch(Backend_URL + "/auth/register", {
+      method: "POST",
+      body: JSON.stringify({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      }
+    });
+    if(!res.ok) {
+      alert(res.statusText);
+      return;
+    }
+    const response = await res.json();
+    return response;
   }
 
-  if (!isLoading) {
-    return false;
-  }
+
   return (
     <form
         className={cn("flex flex-col gap-6", className)}
@@ -108,7 +128,7 @@ export function SignUpForm({
       <div className="text-center text-sm">
         Vous n&apos;avez déjà un compte?{" "}
         <Link href="/sign-in" className="underline underline-offset-4">
-         Créer un compte
+         Se connecter
         </Link>
       </div>
     </form>
