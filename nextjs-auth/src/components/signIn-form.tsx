@@ -4,11 +4,23 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {useEffect, useState} from "react";
+import {signIn} from "next-auth/react";
+import { useRouter } from "next/navigation"
+
+type FormInput = {
+  email: string;
+  password: string;
+}
 
 export function SignInForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"form">) {
+  const router = useRouter()
+  const [formData, setFormData] = useState<FormInput>({
+    email: "",
+    password: "1234",
+  })
   const [mount, setMount] = useState(false)
 
   useEffect(() => {
@@ -18,8 +30,43 @@ export function SignInForm({
   if (!mount) {
     return null;
   }
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const {name, value} = event.target;
+    setFormData((prev)=> ({
+      ...prev,
+      [name]: value,
+    }));
+  }
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log("formulaire soumis: ", formData);
+
+    // const res = await fetch(Backend_URL + "/auth/register", {
+    //   method: "POST",
+    //   body: JSON.stringify({
+    //     email: formData.email,
+    //     password: formData.password,
+    //   }),
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   }
+    // });
+    const res = await signIn('credentials',{formData, redirect: false});
+    if(res?.error) {
+      alert("something went wrong!");
+      return;
+    }
+    router.push("/dashboard");
+  }
+
   return (
-    <form className={cn("flex flex-col gap-6", className)} {...props}>
+    <form
+        className={cn("flex flex-col gap-6", className)}
+        {...props}
+        onSubmit={handleSubmit}
+    >
       <div className="flex flex-col items-center gap-2 text-center">
         <h1 className="text-2xl font-bold">Connectez-vous à votre compte</h1>
         <p className="text-balance text-sm text-muted-foreground">
@@ -28,20 +75,24 @@ export function SignInForm({
       </div>
       <div className="grid gap-6">
         <div className="grid gap-2">
-          <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" placeholder="saidbacoelanrif@gmail.com" required />
+          <Label htmlFor="email" className={"after:content-['*'] after:ml-1 after:text-red-600"}>Email</Label>
+          <Input
+              id="email"
+              type="email"
+              name={"email"}
+              value={formData.email}
+              onChange={handleChange}
+              placeholder={"veuillez sasir votre email"}  required />
         </div>
         <div className="grid gap-2">
-          <div className="flex items-center">
-            <Label htmlFor="password">Mot de passe </Label>
-            <a
-              href="#"
-              className="ml-auto text-sm underline-offset-4 hover:underline"
-            >
-              Mot de passe oublilé?
-            </a>
-          </div>
-          <Input id="password" type="password" required />
+          <Label htmlFor="password" className={"after:content-['*'] after:ml-1 after:text-red-600"}>Mot de passe</Label>
+          <Input
+              id="password"
+              type="password"
+              name={"password"}
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="" required />
         </div>
         <Button type="submit" className="w-full">
           Se connecter
