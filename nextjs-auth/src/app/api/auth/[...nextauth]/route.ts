@@ -15,6 +15,7 @@ export const authOptions: NextAuthOptions = {
                 password: { label :"Password", type: "password"}
             },
             async authorize(credentials, req){
+
                 if (!credentials?.username || !credentials?.password) return null;
                 const {username, password} = credentials;
                 const res = await fetch(Backend_URL+ "/auth/login", {

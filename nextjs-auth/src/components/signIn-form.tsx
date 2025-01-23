@@ -8,7 +8,7 @@ import {signIn} from "next-auth/react";
 import { useRouter } from "next/navigation"
 
 type FormInput = {
-  email: string;
+  username: string;
   password: string;
 }
 
@@ -16,9 +16,10 @@ export function SignInForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"form">) {
+  /* next/navigation when we use app model to next.js */
   const router = useRouter()
   const [formData, setFormData] = useState<FormInput>({
-    email: "",
+    username: "",
     password: "1234",
   })
   const [mount, setMount] = useState(false)
@@ -41,18 +42,14 @@ export function SignInForm({
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log("formulaire soumis: ", formData);
+/*
+* signIn('credentials', formData) --- sign.., {username: "", password: ""}
+* signIn('credentials', {formData}) ---- sign.., { "formatData" : {username: "", password: ""}}
+*
+* signIn('credentials', ...formData) ---- ?
+* signIn('credentials', {...formData} ---- signIn(.... , {username:"", password: ""})
+* */
 
-    // const res = await fetch(Backend_URL + "/auth/register", {
-    //   method: "POST",
-    //   body: JSON.stringify({
-    //     email: formData.email,
-    //     password: formData.password,
-    //   }),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   }
-    // });
     const res = await signIn('credentials',{formData, redirect: false});
     if(res?.error) {
       alert("something went wrong!");
@@ -79,8 +76,9 @@ export function SignInForm({
           <Input
               id="email"
               type="email"
-              name={"email"}
-              value={formData.email}
+              autoComplete={'username'}
+              name={"username"}
+              value={formData.username}
               onChange={handleChange}
               placeholder={"veuillez sasir votre email"}  required />
         </div>
@@ -89,6 +87,7 @@ export function SignInForm({
           <Input
               id="password"
               type="password"
+              autoComplete={'password'}
               name={"password"}
               value={formData.password}
               onChange={handleChange}

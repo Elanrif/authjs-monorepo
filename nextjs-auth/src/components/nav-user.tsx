@@ -29,6 +29,8 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import {signOut} from "next-auth/react";
+import {useRouter} from "next/navigation";
 
 export function NavUser({
   user,
@@ -40,7 +42,7 @@ export function NavUser({
   }
 }) {
   const { isMobile } = useSidebar()
-
+  const router  = useRouter();
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -102,7 +104,13 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className={"text-red-700 hover:text-red-600"}>
+            <DropdownMenuItem
+                className={"text-red-700 hover:text-red-600"}
+                onClick={async ()=> {
+                  await signOut({redirect: false})
+                  router.push("/sign-in")
+                }}
+            >
               <LogOut />
               Déconnexion
             </DropdownMenuItem>
