@@ -30,7 +30,7 @@ export default async function ProfilePage(props: Props) {
             "Content-Type": "application/json",
         },
     })
-    console.log({response})
+    console.log("profile: ",{response})
     const user = await response.json()
 
     return (
