@@ -10,12 +10,19 @@ async function refreshToken(token: JWT): Promise<JWT>{
                 authorization: `Refresh ${token.backendTokens?.refreshToken}`,
             },
         });
-        console.log("token params: ", token);
+
+        if (!res.ok) {
+            throw new Error("Failed to refresh token");
+        }
         const response = await res.json();
-        console.log("token of reshed: ", response);
+        console.log("token of refresh: ", response);
+    console.log("token refreshed: ", {
+        ...token,
+        backendTokens: response,
+    });
         return {
             ...token,
-            backendTokens: response.backendTokens,
+            backendTokens: response,
         }
     }
 
@@ -58,7 +65,7 @@ export const authOptions: NextAuthOptions = {
 
     callbacks:{
         async jwt({token,user}){
-           console.log({token,user});
+           console.log("callbacks (token,user} JWT: ",{token,user});
            if(user) return { ...token, ...user};
 
             // Access token is not expired
@@ -69,6 +76,7 @@ export const authOptions: NextAuthOptions = {
         },
 
         async session({token, session}){
+            console.log("callbacks (token,session) Session: ",{token,session});
             session.user = token.user;
             session.backendTokens = token.backendTokens;
 
