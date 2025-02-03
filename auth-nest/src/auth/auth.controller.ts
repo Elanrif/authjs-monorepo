@@ -25,6 +25,7 @@ export class AuthController {
   @UseGuards(RefreshJwtGuard)
   @Post('refresh')
   async refreshToken(@Request() req) {
+    // eslint-disable-next-line prettier/prettier
     console.log("Refresh");
     return await this.authService.refreshToken(req.user);
   }

@@ -19,6 +19,7 @@ export class UserService {
         password: await hash(dto.password, 10),
       },
     });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...result } = newUser;
     return result;
   }

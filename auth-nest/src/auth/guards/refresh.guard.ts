@@ -10,6 +10,7 @@ import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class RefreshJwtGuard implements CanActivate {
   constructor(private jwtService: JwtService) {}
+
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
