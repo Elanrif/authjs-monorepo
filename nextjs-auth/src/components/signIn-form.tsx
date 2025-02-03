@@ -16,7 +16,7 @@ export function SignInForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"form">) {
-  /* next/navigation when we use app model to next.js */
+  /* userRouter from next/navigation when we use app model to next.js */
   const router = useRouter()
   const [formData, setFormData] = useState<FormInput>({
     username: "",
